@@ -1,0 +1,10 @@
+{
+    "name": "自动水滴",
+    "main": "main.js",
+    "ignore": [
+        "build"
+    ],
+    "packageName": "com.zhidongshuidi",
+    "versionName": "1.0.0",
+    "versionCode": 1
+}
