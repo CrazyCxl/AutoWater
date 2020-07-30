@@ -27,6 +27,7 @@ function checkStars(){
     if(!enter_btn){
         return;
     }
+    return;
     click(enter_btn.bounds().centerX(), enter_btn.bounds().centerY());
     sleep(2000);
 
@@ -39,6 +40,35 @@ function checkStars(){
     back();
 }
 
+function checkRedPackge(){
+    var red_pack_enter_btn = text("可打开").findOnce();
+    if(!red_pack_enter_btn){
+        return;
+    }
+    var rp_parent = red_pack_enter_btn.parent();
+    if(!rp_parent){
+        console.log("红包可打开没有parent");
+        return;
+    }
+
+    click(red_pack_enter_btn.bounds().centerX(), red_pack_enter_btn.bounds().centerY());
+    sleep(1000);
+
+    //关闭弹窗
+    var close_btn = text("继续开红包").findOnce();
+    if(close_btn){
+        click(close_btn.bounds().centerX(), close_btn.bounds().centerY());
+    }else{
+        var close_btn = text("commonPopupCloseButtonV2").findOnce();
+        if(close_btn){
+            click(close_btn.bounds().centerX(), close_btn.bounds().centerY());
+        }else{
+            click(543,1554);
+        }
+    }
+    sleep(100);
+}
+
 function watering(){
     var wtshuihu = idContains("waterbottle").findOne();
     while(wtshuihu){
@@ -49,15 +79,17 @@ function watering(){
         if(shui_num > 10){
             click(wtshuihu.bounds().centerX(), wtshuihu.bounds().centerY());
             mlog("click 水壶");
-            sleep(5000);
+            sleep(3000);
             checkStars();
             sleep(1000);
             //开宝箱
             click(135,1645);
             sleep(1000);
             click(895,358);
-
-            sleep(12000);
+            sleep(100);
+            //开红包
+            checkRedPackge();
+            //sleep(14000);
         }else{
             break;
         }
@@ -148,6 +180,11 @@ function checkWatchGetWater(){
         console.log("btn pos:"+x+" "+y);
         if(y > 2000){
             dy_one = y - 2000;
+            if(dy_one < 100){
+                //太小划不动
+                dy_one = 100;
+            }
+
             while(dy_one > 900){
                 swipe(x-300,2000,x-300,2000-900,1000);
                 sleep(100);
