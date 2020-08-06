@@ -16,8 +16,8 @@ function callPdd(){
 
     tryCloseTreasureBox();
     tryGetAddedWater();
-    //getPDDWater();
-    watering();
+    //watering();
+    getPDDWater();
 
     mlog("拼多多完成");
 }
@@ -25,9 +25,19 @@ function callPdd(){
 function checkStars(){
     var enter_btn = text("equipment_v6").findOnce();
     if(!enter_btn){
+        console.log("not found equipment_v6");
         return;
     }
-    return;
+    var enter_btn_p = enter_btn.parent().parent();
+    if(!enter_btn_p){
+        console.log("not found equipment_v6 parent");
+        return;
+    }
+
+    if(!enter_btn_p.findOne(text("可领取"))){
+        console.log("not found 可领取 in stars")
+        return;
+    }
     click(enter_btn.bounds().centerX(), enter_btn.bounds().centerY());
     sleep(2000);
 
@@ -89,7 +99,7 @@ function watering(){
             sleep(100);
             //开红包
             checkRedPackge();
-            //sleep(14000);
+            sleep(15000);
         }else{
             break;
         }
@@ -131,12 +141,70 @@ function getPDDWater(){
         mlog("没找到领水滴")
         return;
     }
-    sleep(1000);
+    sleep(2000);
     while(checkWatchGetWater()){
         mlog("再次检查浏览得水滴");
     }
     sleep(1000);
 
+}
+
+function gotoFindTreasureBoxs(){
+    //去找宝箱
+    sleep(1000);
+    var box_dialog_text = text("恭喜你发现1个高级宝箱").findOnce();
+    if(box_dialog_text){
+        var box_dialog = box_dialog_text.parent();
+        click(box_dialog.bounds().centerX(), box_dialog.bounds().centerY());
+        sleep(500);
+        click(953,584);
+        sleep(100);
+    }
+    var count = 0;
+    while(count < 3){
+        var box_continue_dialog = text("继续找免费宝箱").findOnce();
+        if(box_continue_dialog){
+            click(box_continue_dialog.bounds().centerX(), box_continue_dialog.bounds().centerY());
+            sleep(100);
+        }
+        var box_btn = textContains("free_treasure_box").findOnce();
+        if(box_btn){
+            var x = box_btn.bounds().centerX();
+            var y = box_btn.bounds().centerY();
+            console.log("box btn showed "+x+" "+y)
+            if(y > 2000){
+                adjustSwipeY(y);
+                continue;
+            }
+            click(x, y);
+            sleep(2000);
+            count += 1;
+        }else{
+            swipe(300,2000,300,2000-300,1000);
+            sleep(100);
+        }
+    }
+    back();
+}
+
+function adjustSwipeY(y){
+    dy_one = y - 2000;
+    if(dy_one < 500){
+        //太小划不动
+        dy_one = 500;
+    }
+
+    while(dy_one > 900){
+        swipe(300,2000,300,2000-900,1000);
+        sleep(100);
+        y = y - 900;
+        dy_one -= 900;
+    }
+    if(dy_one < 500){
+        //太小划不动
+        dy_one = 500;
+    }
+    swipe(300,2000,300,2000-dy_one,1000);
 }
 
 function checkWatchGetWater(){
@@ -167,34 +235,33 @@ function checkWatchGetWater(){
         }
         var t_obj = obj_p.parent();
 
+        var is_gotobox = false;
+
         var text_obj = t_obj.findOne(textContains("浏览"));
         if(!text_obj){
             text_obj = t_obj.findOne(textContains("观看"));
         }
         if(!text_obj){
-            console.log("没有浏览观看")
+            text_obj = t_obj.findOne(text("寻找宝箱"));
+            is_gotobox = true;
+        }
+        if(!text_obj){
+            console.log("没有浏览观看找宝箱")
             continue;
         }
         var y = obj.bounds().centerY();
         var x = obj.bounds().centerX();
         console.log("btn pos:"+x+" "+y);
         if(y > 2000){
-            dy_one = y - 2000;
-            if(dy_one < 100){
-                //太小划不动
-                dy_one = 100;
-            }
-
-            while(dy_one > 900){
-                swipe(x-300,2000,x-300,2000-900,1000);
-                sleep(100);
-                y = y - 900;
-                dy_one -= 900;
-            }
-            swipe(x-300,2000,x-300,2000-dy_one,1000);
+            adjustSwipeY(y);
             return true;
         }
         click(x, y);
+        if(is_gotobox){
+            gotoFindTreasureBoxs();
+            ret = true;
+            continue;
+        }
         sleep(65000);
         var get_water_success_btn = text("领取奖励").findOnce();
         if(get_water_success_btn){
