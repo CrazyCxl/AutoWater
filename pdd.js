@@ -43,7 +43,7 @@ function checkStars(){
 
     var get_btn = text("可领取").findOnce();
     if(get_btn){
-        click(get_btn.bounds().centerX(), get_btn.bounds().centerY());
+        click(get_btn.bounds().centerX()-20, get_btn.bounds().centerY());
         sleep(1000);
     }
 
@@ -70,6 +70,9 @@ function checkRedPackge(){
         click(close_btn.bounds().centerX(), close_btn.bounds().centerY());
     }else{
         var close_btn = text("commonPopupCloseButtonV2").findOnce();
+        if(!close_btn){
+            close_btn = text("去浇水").findOnce();
+        }
         if(close_btn){
             click(close_btn.bounds().centerX(), close_btn.bounds().centerY());
         }else{
