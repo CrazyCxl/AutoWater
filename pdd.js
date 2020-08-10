@@ -18,6 +18,7 @@ function callPdd(){
     tryGetAddedWater();
     //watering();
     getPDDWater();
+    //gotoFindTreasureBoxs();
 
     mlog("拼多多完成");
 }
@@ -166,6 +167,9 @@ function gotoFindTreasureBoxs(){
     var count = 0;
     while(count < 3){
         var box_continue_dialog = text("继续找免费宝箱").findOnce();
+        if(!box_continue_dialog){
+            box_continue_dialog = text("去拼单").findOnce();
+        }
         if(box_continue_dialog){
             click(box_continue_dialog.bounds().centerX(), box_continue_dialog.bounds().centerY());
             sleep(100);
@@ -175,7 +179,7 @@ function gotoFindTreasureBoxs(){
             var x = box_btn.bounds().centerX();
             var y = box_btn.bounds().centerY();
             console.log("box btn showed "+x+" "+y)
-            if(y > 2000){
+            if(y > 1000){
                 adjustSwipeY(y);
                 continue;
             }
@@ -188,6 +192,10 @@ function gotoFindTreasureBoxs(){
         }
     }
     back();
+    var exit_btn = text("直接离开").findOnce();
+    if(exit_btn){
+        click(exit_btn.bounds().centerX(), exit_btn.bounds().centerY());
+    }
 }
 
 function adjustSwipeY(y){
