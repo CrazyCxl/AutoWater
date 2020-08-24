@@ -14,12 +14,11 @@ function callPdd(){
 
     // sleep(1000);
 
-    tryCloseTreasureBox();
-    tryGetAddedWater();
+    //tryCloseTreasureBox();
+    //tryGetAddedWater();
     //watering();
     getPDDWater();
     //gotoFindTreasureBoxs();
-
     mlog("拼多多完成");
 }
 
@@ -179,7 +178,7 @@ function gotoFindTreasureBoxs(){
             var x = box_btn.bounds().centerX();
             var y = box_btn.bounds().centerY();
             console.log("box btn showed "+x+" "+y)
-            if(y > 1000){
+            if(y > 1500){
                 adjustSwipeY(y);
                 continue;
             }
@@ -194,7 +193,12 @@ function gotoFindTreasureBoxs(){
     back();
     var exit_btn = text("直接离开").findOnce();
     if(exit_btn){
+        mlog("点击直接离开");
         click(exit_btn.bounds().centerX(), exit_btn.bounds().centerY());
+    }else{
+        console.log("call back");
+        sleep(2000);
+        back();
     }
 }
 
@@ -268,6 +272,7 @@ function checkWatchGetWater(){
             return true;
         }
         click(x, y);
+        obj.click();
         if(is_gotobox){
             gotoFindTreasureBoxs();
             ret = true;
