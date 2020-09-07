@@ -43,7 +43,7 @@ function checkStars(){
 
     var get_btn = text("可领取").findOnce();
     if(get_btn){
-        click(get_btn.bounds().centerX()-20, get_btn.bounds().centerY());
+        click(get_btn.bounds().centerX()-25, get_btn.bounds().centerY());
         sleep(1000);
     }
 
@@ -96,13 +96,13 @@ function watering(){
             checkStars();
             sleep(1000);
             //开宝箱
-            click(135,1645);
-            sleep(1000);
-            click(895,358);
-            sleep(100);
+            //click(135,1645);
+            //sleep(1000);
+            //click(895,358);
+            //sleep(100);
             //开红包
-            checkRedPackge();
-            sleep(15000);
+            //checkRedPackge();
+            //sleep(15000);
         }else{
             break;
         }
@@ -278,7 +278,16 @@ function checkWatchGetWater(){
             ret = true;
             continue;
         }
-        sleep(65000);
+        sleep(1000);
+        var video_surprise = text("哇，看视频也能有惊喜！").findOnce();
+        if(video_surprise){
+            click(video_surprise.bounds().centerX(), video_surprise.bounds().centerY());
+            sleep(1000);
+            click(911,474);
+            sleep(63000);
+        }else{
+            sleep(64000);
+        }
         var get_water_success_btn = text("领取奖励").findOnce();
         if(get_water_success_btn){
             click(get_water_success_btn.bounds().centerX(), get_water_success_btn.bounds().centerY());
