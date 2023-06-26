@@ -1,5 +1,5 @@
-var callMT = require('./mt.js').CallMT
-var callPDD = require('./pdd.js').CallPDD
+//var callMT = require('./mt.js').CallMT
+let callPDD = require('./pdd.js').CallPDD
 
 "auto";
 //setScreenMetrics(2160,1080);

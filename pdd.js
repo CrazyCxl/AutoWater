@@ -1,23 +1,32 @@
-var mlog = require('./base.js').MLog
+let mlog = require('./base.js').MLog
 
 function callPdd(){
-    // launchApp("拼多多");
+    launchApp("拼多多");
     // sleep(10000);
 
-    // var duoduogy = text("多多果园").findOnce();
-    // if (duoduogy) {
-    //     click(duoduogy.bounds().centerX(), duoduogy.bounds().centerY());
-    // }else{
-    //     mlog("not found 多多果园")
-    //     return;
-    // }
+    var in_gy = false;
+    for (let i = 0; i < 10; i++) {
+        var duoduogy = text("多多果园").findOnce();
+        if (duoduogy) {
+            click(duoduogy.bounds().centerX(), duoduogy.bounds().centerY());
+            in_gy = true;
+            break;
+        }
+        sleep(1000);
+    }
 
-    // sleep(1000);
+    if(!in_gy)
+    {
+        mlog("not found 多多果园");
+        return;
+    }
+        
+    sleep(1000);
 
     //tryCloseTreasureBox();
     //tryGetAddedWater();
     //watering();
-    getPDDWater();
+    //getPDDWater();
     //gotoFindTreasureBoxs();
     mlog("拼多多完成");
 }
@@ -132,8 +141,8 @@ function tryCloseTreasureBox(){
     var close_btn = text("commonPopupCloseButtonV2").findOnce();
     if(close_btn){
         click(close_btn.bounds().centerX(), close_btn.bounds().centerY());
+        sleep(1000);
     }
-    sleep(1000);
 }
 
 function getPDDWater(){
@@ -149,7 +158,6 @@ function getPDDWater(){
         mlog("再次检查浏览得水滴");
     }
     sleep(1000);
-
 }
 
 function gotoFindTreasureBoxs(){
