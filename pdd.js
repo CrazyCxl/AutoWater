@@ -23,7 +23,7 @@ function callPdd(){
         
     sleep(1000);
 
-    //tryCloseTreasureBox();
+    tryCloseTreasureBox();
     //tryGetAddedWater();
     //watering();
     //getPDDWater();
