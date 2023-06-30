@@ -1,4 +1,7 @@
 let mlog = require('./base.js').MLog
+let checkTextTextAndClick2 = require('./base.js').checkTextTextAndClick2
+let checkTextAndClick = require('./base.js').checkTextAndClick
+let checkIDAndClick = require('./base.js').checkIDAndClick
 
 function enterGuoYuan(){
     launchApp("拼多多");
@@ -40,7 +43,7 @@ function checkSaiZhi(){
 
         mlog("click 摇赢水滴")
         saizhi_btr.click()
-        sleep(1000)
+        sleep(2000)
 
         var zbbc=  text("领取战败补偿").findOnce();
         if(zbbc)
@@ -85,6 +88,17 @@ function tryDKWater(){
     }
 }
 
+
+function getWaterFromST()
+{
+    checkTextTextAndClick2("水滴已溢出","请及时领取")
+}
+
+function checkLeaf()
+{
+    checkIDAndClick("fallenlLeaves")
+}
+
 function callPdd(){
     //enterGuoYuan()
     tryCloseBox();
@@ -98,7 +112,12 @@ function callPdd(){
     //打卡集水滴
     tryDKWater();
 
-    //
+    //从水桶领水滴
+    getWaterFromST()
+
+    //检查树叶
+    checkLeaf()
+
     //watering();
     //getPDDWater();
     //gotoFindTreasureBoxs();
