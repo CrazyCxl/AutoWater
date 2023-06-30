@@ -3,8 +3,9 @@ let callPDD = require('./pdd.js').CallPDD
 
 "auto";
 //setScreenMetrics(2160,1080);
-setScreenMetrics(1080, 1920);
+//setScreenMetrics(1080, 1920);
 
 //callMT();
 
 callPDD()
+

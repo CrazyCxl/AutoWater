@@ -1,30 +1,104 @@
 let mlog = require('./base.js').MLog
 
-function callPdd(){
+function enterGuoYuan(){
     launchApp("拼多多");
-    // sleep(10000);
 
     var in_gy = false;
     for (let i = 0; i < 10; i++) {
-        var duoduogy = text("多多果园").findOnce();
-        if (duoduogy) {
-            click(duoduogy.bounds().centerX(), duoduogy.bounds().centerY());
-            in_gy = true;
-            break;
-        }
-        sleep(1000);
+    var duoduogy = text("多多果园").findOnce();
+    if (duoduogy) {
+        click(duoduogy.bounds().centerX(), duoduogy.bounds().centerY());
+        in_gy = true;
+        break;
     }
+    sleep(1000);
+    } 
 
     if(!in_gy)
     {
         mlog("not found 多多果园");
         return;
     }
-        
-    sleep(1000);
+    
+    sleep(2000);
+}
 
-    tryCloseTreasureBox();
-    //tryGetAddedWater();
+function checkSaiZhi(){
+    var saizhi_btr = text("摇赢水滴").findOnce();
+    if(saizhi_btr)
+    {
+        var check1 = saizhi_btr.parent().parent();
+        if(!check1){
+            console.log("not found 摇赢水滴 parent");
+            return;
+        }
+    
+        if(!check1.findOne(text("领取奖励"))){
+            console.log("not found 领取奖励 in 摇赢水滴")
+            return;
+        }
+
+        mlog("click 摇赢水滴")
+        saizhi_btr.click()
+        sleep(1000)
+
+        var zbbc=  text("领取战败补偿").findOnce();
+        if(zbbc)
+        {
+            zbbc.click()
+            sleep(1000)
+            click(530,1530)
+            sleep(3000)
+            back()
+            sleep(1000)
+        }
+    }
+}
+
+function tryDKWater(){
+    var dk = text("打卡集水滴").findOnce();
+    if(!dk)
+    {
+        console.warn("no 打卡集水滴")
+        return
+    }
+
+    var dk_parent = dk.parent();
+    if(!dk_parent){
+        console.log("not found 打卡集水滴 parent");
+        return;
+    }
+
+    if(!dk_parent.findOne(text("可打卡"))){
+        return;
+    }
+
+    dk.click()
+    sleep(1000)
+    var dksjjrsd =text("打卡收集今日水滴").findOnce(); 
+    if(dksjjrsd)
+    {
+        dksjjrsd.click()
+        sleep(2000)
+        click(950,600)
+        sleep(1000)
+    }
+}
+
+function callPdd(){
+    //enterGuoYuan()
+    tryCloseBox();
+
+    //获取昨日浇水
+    tryGetAddedWater();
+
+    //骰子
+    checkSaiZhi();
+
+    //打卡集水滴
+    tryDKWater();
+
+    //
     //watering();
     //getPDDWater();
     //gotoFindTreasureBoxs();
@@ -124,9 +198,9 @@ function tryGetAddedWater(){
     if(added_btn){
         var x = added_btn.bounds().centerX();
         var y = added_btn.bounds().centerY();
-        if( Math.abs(x - 691) < 50 && Math.abs(y - 1420) < 50 ){
+        if( Math.abs(x - 691) < 100){
             click(x,y);
-            sleep(1000);
+            sleep(2001);
             var continue_btn = text("继续浇水，累积明日奖励").findOnce();
             if(continue_btn){
                 click(continue_btn.bounds().centerX(), continue_btn.bounds().centerY());
@@ -136,12 +210,19 @@ function tryGetAddedWater(){
     }
 }
 
-function tryCloseTreasureBox(){
-    //关闭浇水赢保险
-    var close_btn = text("commonPopupCloseButtonV2").findOnce();
-    if(close_btn){
-        click(close_btn.bounds().centerX(), close_btn.bounds().centerY());
-        sleep(1000);
+function tryCloseBox(){
+    var close_box = idContains("fun-widgets-popup-overlay").findOnce()
+    if(close_box)
+    {
+        mlog("find a close box")
+        var content1 = text("2斤猕猴桃包邮送到家").findOnce();
+        if(content1){
+            mlog("close 2斤猕猴桃包邮送到家")
+            click(950,600);
+            sleep(1000);
+        }else{
+            mlog("not found")
+        }
     }
 }
 
