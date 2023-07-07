@@ -1,13 +1,13 @@
 //var callMT = require('./mt.js').CallMT
 let callPDD = require('./pdd.js').CallPDD
+let tryCloseBox = require('./pdd.js').tryCloseBox
 let checkTextTextAndClick2 = require('./base.js').checkTextTextAndClick2
+let checkTextAndClick = require('./base.js').checkTextAndClick
 
 "auto";
 //setScreenMetrics(2160,1080);
 //setScreenMetrics(1080, 1920);
 
-//callMT();
-
-callPDD()
+//callPDD()
 
 

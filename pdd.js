@@ -3,6 +3,7 @@ let checkTextTextAndClick2 = require('./base.js').checkTextTextAndClick2
 let checkTextAndClick = require('./base.js').checkTextAndClick
 let checkIDAndClick = require('./base.js').checkIDAndClick
 
+//进入果园
 function enterGuoYuan(){
     launchApp("拼多多");
 
@@ -96,12 +97,37 @@ function getWaterFromST()
 
 function checkLeaf()
 {
-    checkIDAndClick("fallenlLeaves")
+    var btn1 = idContains("fallenlLeaves").findOnce();
+    if(btn1)
+    {
+        var x = btn1.bounds().centerX()+100;
+        var y = btn1.bounds().centerY();
+        console.log("click id fallenlLeaves "+x+","+y)
+        click(x,y)
+        sleep(5000)
+        click(950,600);
+        sleep(1000);
+    }else{
+        console.log("not found fallenlLeaves")
+    }
+}
+
+//浇水竞赛
+function checkJSJS()
+{
+    checkTextTextAndClick2("浇水竞赛","可领取")
+    checkTextAndClick("继续参与下一期")
+    sleep(5000)
+    click(945,428)
+    sleep(2000)
 }
 
 function callPdd(){
     //enterGuoYuan()
     tryCloseBox();
+
+    //浇水竞赛
+    checkJSJS();
 
     //获取昨日浇水
     tryGetAddedWater();
@@ -119,7 +145,7 @@ function callPdd(){
     checkLeaf()
 
     //watering();
-    //getPDDWater();
+    getPDDWater();
     //gotoFindTreasureBoxs();
     mlog("拼多多完成");
 }
@@ -235,29 +261,26 @@ function tryCloseBox(){
     {
         mlog("find a close box")
         var content1 = text("2斤猕猴桃包邮送到家").findOnce();
+        var content2 = text("恭喜获得").findOnce();
+        var founded = true;
         if(content1){
             mlog("close 2斤猕猴桃包邮送到家")
+        }else if(content2){
+            mlog("close 恭喜获得养分")
+        }else{
+            founded = false
+            mlog("not found")
+        }
+
+        if(founded)
+        {
             click(950,600);
             sleep(1000);
-        }else{
-            mlog("not found")
         }
     }
 }
 
 function getPDDWater(){
-    var get_water_btn = text("领水滴").findOnce();
-    if(get_water_btn){
-        click(236,1842);
-    }else{
-        mlog("没找到领水滴")
-        return;
-    }
-    sleep(2000);
-    while(checkWatchGetWater()){
-        mlog("再次检查浏览得水滴");
-    }
-    sleep(1000);
 }
 
 function gotoFindTreasureBoxs(){
@@ -409,5 +432,6 @@ function checkWatchGetWater(){
 }
 
 module.exports = {
-    CallPDD: callPdd
+    CallPDD: callPdd,
+    tryCloseBox:tryCloseBox
 }
