@@ -8,6 +8,4 @@ let checkTextAndClick = require('./base.js').checkTextAndClick
 //setScreenMetrics(2160,1080);
 //setScreenMetrics(1080, 1920);
 
-//callPDD()
-
-
+callPDD()
