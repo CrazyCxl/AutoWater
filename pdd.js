@@ -31,7 +31,11 @@ function enterGuoYuan(){
 
 function checkSaiZhi(){
     console.log("enter 骰子")
-    var saizhi_btr = text("摇赢水滴").findOnce();
+    var saizhi_texts = ["摇赢水滴","第4名"]
+    var saizhi_btr = null;
+    for (var i = 0; i < saizhi_texts.length && !saizhi_btr; i++) {
+        saizhi_btr = text(saizhi_texts[i]).findOnce();
+    }
     if(saizhi_btr)
     {
         var check1 = saizhi_btr.parent().parent();
@@ -167,13 +171,7 @@ function callPdd(){
 }
 
 function watering(){
-    var man_obj = textContains("满").findOnce()
-    if(!man_obj)
-    {
-        return false
-    }
-
-    if(man_obj.parent().findOne(textContains("得")))
+    if(textContains("得").findOnce() && textContains("满").findOnce())
     {
         console.log("need water")
         if(checkTextTextAndClick2("浇水","次"))
@@ -181,6 +179,8 @@ function watering(){
             sleep(3000)
         }
         tryCloseBox()
+    }else{
+        console.log("no 得")
     }
 }
 
@@ -194,16 +194,14 @@ function tryGetAddedWater(){
         if( Math.abs(x - 691) < 100){
             click(x,y);
             sleep(2001);
-            var continue_btn = text("继续浇水，累积明日奖励").findOnce();
-            if(continue_btn){
-                click(continue_btn.bounds().centerX(), continue_btn.bounds().centerY());
-                sleep(1000);
-            }
+            checkTextAndClick("继续浇水，累积明日奖励")
+            checkTextAndClick("领取奖励去浇水")
         }
     }
 }
 
 function tryCloseBoxFirst(){
+    sleep(3000)
     var close_box = idContains("fun-widgets-popup-overlay").findOnce()
     if(close_box)
     {
@@ -234,36 +232,57 @@ function tryCloseBoxFirst(){
 
 function tryCloseBox()
 {
-    if(checkTextAndClick("去浇水"))
+    try_closed = true
+    var checked_texts = ["去浇水","一键浇水，消耗100g","去浇水集水滴","暂时放弃翻倍水果"]
+    var contain_texts = ["仅领取","仅收下"]
+    var deep_texts = ["去开大额水滴宝箱","马上去种花","去浏览得水滴","去拼单领礼包"]
+    while(try_closed)
     {
-        containTextAndClick("仅领取")
-    }
-    //if(checkTextAndClick("立即收下"))
-    //{
-    //    back()
-    //    sleep(1000)
-    //}
-    //if(checkTextAndClick("去领取"))
-    //{
-    //    back()
-    //    sleep(1000)
-    //}
-    //if(checkTextAndClick("立即领取"))
-    //{
-    //    back()
-    //    sleep(1000)
-    //}
-    if(textContains("上滑浏览").findOnce())
-    {
-        click(992,378)
-        console.log("close 上滑浏览")
-    }
-    var close_box = idContains("fun-widgets-popup-overlay").findOnce()
-    if(close_box)
-    {
-        console.log("find a close box")
-        click(966,721)
-        sleep(1000)
+        try_closed = false
+        for (var i = 0; i < checked_texts.length; i++) {
+            if(checkTextAndClick(checked_texts[i]))
+            {
+                try_closed = true
+                break
+            }
+        }
+        for (var i = 0; i < contain_texts.length; i++) {
+            if(containTextAndClick(contain_texts[i]))
+            {
+                try_closed = true
+                break
+            }
+        }
+        for (var i = 0; i < deep_texts.length; i++) {
+            if(checkTextAndClick(deep_texts[i]))
+            {
+                sleep(5000)
+                back()
+                sleep(1000)
+                back()
+                sleep(2000)
+                var duoduogy = text("多多果园").findOnce();
+                if (duoduogy) {
+                    click(duoduogy.bounds().centerX(), duoduogy.bounds().centerY());
+                    sleep(3000)
+                }
+                return
+            }
+        }
+        if(textContains("上滑浏览").findOnce())
+        {
+            click(992,378)
+            console.log("close 上滑浏览")
+            try_closed = true
+        }
+        var close_box = idContains("fun-widgets-popup-overlay").findOnce()
+        if(close_box)
+        {
+            console.log("find a close box")
+            click(966,721)
+            sleep(1000)
+            try_closed = true
+        }
     }
 }
 
@@ -288,9 +307,7 @@ function getPDDWater(){
         sleep(2000);
         if(checkTextAndClick("领取"))
         {
-            checkTextAndClick("仅收下20g")
-            checkTextAndClick("一键浇水，消耗100g")
-            checkTextAndClick("去浇水")
+            tryCloseBox()
         }
         //三餐福袋
         if(checkTextAndClick("去领取"))

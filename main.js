@@ -9,3 +9,4 @@ let checkTextAndClick = require('./base.js').checkTextAndClick
 //setScreenMetrics(1080, 1920);
 
 callPDD()
+//tryCloseBox()
