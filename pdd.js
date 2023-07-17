@@ -10,7 +10,7 @@ const base = require('./base.js');
 //进入果园
 function enterGuoYuan(){
     launchApp("拼多多");
-
+    sleep(2000)
     var in_gy = false;
     for (let i = 0; i < 10; i++) {
     var duoduogy = text("多多果园").findOnce();
@@ -70,13 +70,13 @@ function checkSaiZhi(){
             }
     
             //浏览得水滴
-            for(var i=0;i<3;i++)
-            {
-                click(524,2164)
-                sleep(32000)
-                back()
-                sleep(2000)
-            }
+            // for(var i=0;i<3;i++)
+            // {
+            //     click(524,2164)
+            //     sleep(32000)
+            //     back()
+            //     sleep(2000)
+            // }
         }
         
         //back
@@ -151,7 +151,7 @@ function checkJSJS()
 }
 
 function callPdd(){
-    //enterGuoYuan()
+    enterGuoYuan()
     tryCloseBoxFirst();
     
     //浇水竞赛
@@ -182,6 +182,11 @@ function callPdd(){
         getWaterFromST()
 
         need_water = watering();
+        if(text("点击收获果实").findOnce())
+        {
+            console.log("可收获")
+            need_water = false
+        }
     }
 
     mlog("拼多多完成");
@@ -197,8 +202,7 @@ function watering(){
         }
 
         sleep(3000)
-        tryCloseBox()
-        return true
+        return tryCloseBox()
     }else{
         console.log("no 得")
         return false
@@ -241,6 +245,7 @@ function tryCloseBoxFirst(){
         }else{
             founded = false
             mlog("not found close box")
+            tryCloseBox()
         }
 
         if(founded)
@@ -253,9 +258,9 @@ function tryCloseBoxFirst(){
 
 function tryCloseBox()
 {
-    try_closed = true
+    var try_closed = true
     var checked_texts = ["去浇水","一键浇水，消耗100g","去浇水集水滴","暂时放弃翻倍水果"]
-    var contain_texts = ["仅领取","仅收下"]
+    var contain_texts = ["仅领取","仅收下","稍后再来收集"]
     var deep_texts = ["去开大额水滴宝箱","马上去种花","去浏览得水滴","去拼单领礼包"]
     while(try_closed)
     {
@@ -267,11 +272,12 @@ function tryCloseBox()
             if(base.tryCloseFirstImageChird(close_box.parent()))
             {
                 try_closed = true
+                sleep(2000)
+                continue;
             }
-            sleep(2000)
-            continue;
+            return false
         }
-        return;
+        return true
         for (var i = 0; i < checked_texts.length; i++) {
             if(checkTextAndClick(checked_texts[i]))
             {
@@ -309,6 +315,7 @@ function tryCloseBox()
             try_closed = true
         }
     }
+    return true
 }
 
 function getHuaFei(){

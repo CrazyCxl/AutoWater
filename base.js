@@ -54,8 +54,20 @@ var tryCloseFirstImageChird = function(obj)
         return false
     }
     var name = obj.className()
-    //console.log(name+" "+obj.clickable())
+    //console.log(name+" "+obj.clickable()+" "+obj.bounds().centerX()+","+obj.bounds().centerY()+" "+obj.text())
+    var need_click = false
     if(obj.clickable() && (name == "android.view.View"))
+    {
+        need_click = true
+    }
+    
+    // p_name = obj.parent().className()
+    // if(obj.parent().childCount() == 1
+    // && p_name == "android.view.View" && name == "android.widget.Image")
+    // {
+    //     need_click = true
+    // }
+    if(need_click)
     {
         console.log("click a close box "+obj.bounds().centerX()+","+obj.bounds().centerY())
         obj.click()
