@@ -47,6 +47,33 @@ var checkTextPosAndClick = function(str1,px,py)
     return false
 }
 
+var tryCloseFirstImageChird = function(obj)
+{
+    if(obj == null)
+    {
+        return false
+    }
+    var name = obj.className()
+    //console.log(name+" "+obj.clickable())
+    if(obj.clickable() && (name == "android.view.View"))
+    {
+        console.log("click a close box "+obj.bounds().centerX()+","+obj.bounds().centerY())
+        obj.click()
+        return true
+    }
+
+    var childs_len = obj.childCount()
+    for(var i=0;i<childs_len;i++)
+    {
+        if(tryCloseFirstImageChird(obj.child(i)))
+        {
+            return true
+        }
+    }
+    
+    return false
+}
+
 var containTextAndClick = function(str1)
 {
     var btn1 = textContains(str1).findOnce();
@@ -124,5 +151,6 @@ module.exports = {
     checkTextAndClick:checkTextAndClick,
     checkIDAndClick:checkIDAndClick,
     containTextAndClick:containTextAndClick,
+    tryCloseFirstImageChird:tryCloseFirstImageChird,
     checkTextPosAndClick:checkTextPosAndClick
 }

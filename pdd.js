@@ -5,6 +5,8 @@ let checkIDAndClick = require('./base.js').checkIDAndClick
 let containTextAndClick = require('./base.js').containTextAndClick
 let checkTextPosAndClick = require('./base.js').checkTextPosAndClick
 
+const base = require('./base.js');
+
 //进入果园
 function enterGuoYuan(){
     launchApp("拼多多");
@@ -54,19 +56,30 @@ function checkSaiZhi(){
 
         mlog("click 摇赢水滴")
         saizhi_btr.click()
-        sleep(2000)
+        sleep(3000)
 
-        checkTextAndClick("立即领取")
-        
-        var zbbc=  text("领取战败补偿").findOnce();
-        if(zbbc)
+        if(checkTextAndClick("立即领取"))
         {
-            zbbc.click()
-            sleep(1000)
-            click(530,1530)
-            sleep(3000)
+            var zbbc=  text("领取战败补偿").findOnce();
+            if(zbbc)
+            {
+                zbbc.click()
+                sleep(1000)
+                click(530,1530)
+                sleep(3000)
+            }
+    
+            //浏览得水滴
+            for(var i=0;i<3;i++)
+            {
+                click(524,2164)
+                sleep(32000)
+                back()
+                sleep(2000)
+            }
         }
-
+        
+        //back
         click(56,132)
         sleep(1000)
     }
@@ -147,25 +160,29 @@ function callPdd(){
     //获取昨日浇水
     tryGetAddedWater();
 
-    //骰子
-    checkSaiZhi();
-
     //打卡集水滴
     tryDKWater();
 
-    //从水桶领水滴
-    getWaterFromST()
+    var need_water = true;
+    while(need_water)
+    {
+        //骰子
+        checkSaiZhi();
 
-    //检查树叶
-    checkLeaf()
+        //检查树叶
+        checkLeaf()
 
-    //领水滴
-    getPDDWater();
+        //领水滴
+        getPDDWater();
 
-    //领化肥
-    getHuaFei();
+        //领化肥
+        getHuaFei();
 
-    watering();
+        //从水桶领水滴
+        getWaterFromST()
+
+        need_water = watering();
+    }
 
     mlog("拼多多完成");
 }
@@ -174,13 +191,17 @@ function watering(){
     if(textContains("得").findOnce() && textContains("满").findOnce())
     {
         console.log("need water")
-        if(checkTextTextAndClick2("浇水","次"))
+        if(!checkTextTextAndClick2("浇水","次"))
         {
-            sleep(3000)
+            click(950,2028)
         }
+
+        sleep(3000)
         tryCloseBox()
+        return true
     }else{
         console.log("no 得")
+        return false
     }
 }
 
@@ -239,6 +260,18 @@ function tryCloseBox()
     while(try_closed)
     {
         try_closed = false
+        var close_box = idContains("fun-widgets-popup-overlay").findOnce()
+        if(close_box)
+        {
+            console.log("find a close box")
+            if(base.tryCloseFirstImageChird(close_box.parent()))
+            {
+                try_closed = true
+            }
+            sleep(2000)
+            continue;
+        }
+        return;
         for (var i = 0; i < checked_texts.length; i++) {
             if(checkTextAndClick(checked_texts[i]))
             {
@@ -275,14 +308,6 @@ function tryCloseBox()
             console.log("close 上滑浏览")
             try_closed = true
         }
-        var close_box = idContains("fun-widgets-popup-overlay").findOnce()
-        if(close_box)
-        {
-            console.log("find a close box")
-            click(966,721)
-            sleep(1000)
-            try_closed = true
-        }
     }
 }
 
@@ -293,7 +318,7 @@ function getHuaFei(){
         checkTextAndClick("打卡领取")
         if(checkTextAndClick("领取"))
         {
-            containTextAndClick("仅收下小袋化肥")
+            tryCloseBox()
         }else{
             click(995,939)
             sleep(2000)
