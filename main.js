@@ -10,5 +10,3 @@ let containTextAndClick = require('./base.js').containTextAndClick
 //setScreenMetrics(1080, 1920);
 
 callPDD()
-//tryCloseBox()
-

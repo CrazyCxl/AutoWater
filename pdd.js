@@ -11,15 +11,26 @@ const base = require('./base.js');
 function enterGuoYuan(){
     launchApp("拼多多");
     sleep(2000)
+    if(!text("现金大转盘").findOnce())
+    {
+        return;
+    }
+
     var in_gy = false;
     for (let i = 0; i < 10; i++) {
-    var duoduogy = text("多多果园").findOnce();
-    if (duoduogy) {
-        click(duoduogy.bounds().centerX(), duoduogy.bounds().centerY());
-        in_gy = true;
-        break;
-    }
-    sleep(1000);
+        var duoduogy = text("多多果园").findOnce();
+        if (duoduogy) {
+            click(duoduogy.bounds().centerX(), duoduogy.bounds().centerY());
+            sleep(3000);
+            if(text("现金大转盘").findOnce())
+            {
+                click(905,615);
+                continue;
+            }
+            in_gy = true;
+            break;
+        }
+        sleep(1000);
     } 
 
     if(!in_gy)
@@ -60,15 +71,6 @@ function checkSaiZhi(){
 
         if(checkTextAndClick("立即领取"))
         {
-            var zbbc=  text("领取战败补偿").findOnce();
-            if(zbbc)
-            {
-                zbbc.click()
-                sleep(1000)
-                click(530,1530)
-                sleep(3000)
-            }
-    
             //浏览得水滴
             // for(var i=0;i<3;i++)
             // {
@@ -79,6 +81,15 @@ function checkSaiZhi(){
             // }
         }
         
+        var zbbc=  text("领取战败补偿").findOnce();
+        if(zbbc)
+        {
+            zbbc.click()
+            sleep(1000)
+            click(530,1530)
+            sleep(3000)
+        }
+
         //back
         click(56,132)
         sleep(1000)
@@ -153,7 +164,6 @@ function checkJSJS()
 function callPdd(){
     enterGuoYuan()
     tryCloseBoxFirst();
-    
     //浇水竞赛
     checkJSJS();
 
@@ -193,16 +203,25 @@ function callPdd(){
 }
 
 function watering(){
-    if(textContains("得").findOnce() && textContains("满").findOnce())
+    d_box = textContains("得").findOnce()
+    m_box = textContains("满").findOnce()
+    
+    if( d_box&&m_box )
     {
-        console.log("need water")
-        if(!checkTextTextAndClick2("浇水","次"))
+        d_box_x = d_box.bounds().centerX()
+        if(d_box_x <830 && d_box_x >666)
         {
-            click(950,2028)
+            console.log("need water")
+            if(!checkTextTextAndClick2("浇水","次"))
+            {
+                click(950,2028)
+            }
+    
+            sleep(3000)
+            return tryCloseBox()
+        }else{
+            console.log("得 center x not valid: "+d_box_x)
         }
-
-        sleep(3000)
-        return tryCloseBox()
     }else{
         console.log("no 得")
         return false
@@ -259,7 +278,7 @@ function tryCloseBoxFirst(){
 function tryCloseBox()
 {
     var try_closed = true
-    var checked_texts = ["去浇水","一键浇水，消耗100g","去浇水集水滴","暂时放弃翻倍水果"]
+    var checked_texts = ["去浇水"]
     var contain_texts = ["仅领取","仅收下","稍后再来收集"]
     var deep_texts = ["去开大额水滴宝箱","马上去种花","去浏览得水滴","去拼单领礼包"]
     while(try_closed)
@@ -276,6 +295,8 @@ function tryCloseBox()
                 continue;
             }
             return false
+        }else{
+            click(535,1679)
         }
         return true
         for (var i = 0; i < checked_texts.length; i++) {
@@ -342,11 +363,11 @@ function getPDDWater(){
             tryCloseBox()
         }
         //三餐福袋
-        if(checkTextAndClick("去领取"))
-        {
-            click(997,784)
-            sleep(2000)
-        }
+        //if(checkTextAndClick("去领取"))
+        //{
+        //    click(997,784)
+        //    sleep(2000)
+        //}
     }
 }
 
