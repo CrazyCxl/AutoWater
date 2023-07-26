@@ -164,6 +164,7 @@ function checkJSJS()
 function callPdd(){
     enterGuoYuan()
     tryCloseBoxFirst();
+    
     //浇水竞赛
     checkJSJS();
 
@@ -209,7 +210,7 @@ function watering(){
     if( d_box&&m_box )
     {
         d_box_x = d_box.bounds().centerX()
-        if(d_box_x <830 && d_box_x >666)
+        if(d_box_x <900 && d_box_x >666)
         {
             console.log("need water")
             if(!checkTextTextAndClick2("浇水","次"))
@@ -240,6 +241,7 @@ function tryGetAddedWater(){
             sleep(2001);
             checkTextAndClick("继续浇水，累积明日奖励")
             checkTextAndClick("领取奖励去浇水")
+            tryCloseBox()
         }
     }
 }
@@ -294,6 +296,8 @@ function tryCloseBox()
                 sleep(2000)
                 continue;
             }
+
+            console.log("box not closed")
             return false
         }else{
             click(535,1679)
