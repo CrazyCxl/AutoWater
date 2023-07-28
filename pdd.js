@@ -178,7 +178,7 @@ function callPdd(){
     while(need_water)
     {
         //骰子
-        checkSaiZhi();
+        //checkSaiZhi();
 
         //检查树叶
         checkLeaf()
