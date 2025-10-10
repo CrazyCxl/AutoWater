@@ -88,7 +88,7 @@ var tryCloseFirstImageChird = function(obj)
 
 var containTextAndClick = function(str1)
 {
-    var btn1 = textContains(str1).findOnce();
+    var btn1 = contentContains(str1).findOnce();
     if(btn1)
     {
         var x = btn1.bounds().centerX();
@@ -105,7 +105,7 @@ var containTextAndClick = function(str1)
 
 var checkTextAndClick = function(str1)
 {
-    var btn1 = text(str1).findOnce();
+    var btn1 = content(str1).findOnce();
     if(btn1)
     {
         var x = btn1.bounds().centerX();

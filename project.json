@@ -1,5 +1,5 @@
 {
-    "name": "自动水滴",
+    "name": "自动签到",
     "main": "main.js",
     "ignore": [
         "build"
